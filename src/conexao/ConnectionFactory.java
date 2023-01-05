@@ -12,7 +12,7 @@ public class ConnectionFactory {
 
     public Connection getConnection() {
         try {
-                return DriverManager.getConnection("jdbc:mysql://localhost/AutomacaoFarmacia","root","");
+                return DriverManager.getConnection("jdbc:mysql://localhost/bdautomacaofarmacia","root","");
             }         
                 catch(SQLException excecao) {
                     throw new RuntimeException(excecao);
