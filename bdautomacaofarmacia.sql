@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 05-Jan-2023 às 20:26
+-- Tempo de geração: 06-Jan-2023 às 20:27
 -- Versão do servidor: 5.5.21
 -- versão do PHP: 7.4.26
 
@@ -21,17 +21,11 @@ SET time_zone = "+00:00";
 -- Banco de dados: `bdautomacaofarmacia`
 --
 
-
-CREATE DATABASE bdautomacaofarmacia;
-USE bdautomacaofarmacia;
-
 -- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `cliente`
 --
-
-
 
 DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -44,7 +38,14 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `clienteCep` varchar(9) NOT NULL,
   `clienteTelefone` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`idCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `cliente`
+--
+
+INSERT INTO `cliente` (`idCliente`, `clienteNome`, `clienteEndereco`, `clienteBairro`, `clienteCidade`, `clienteEstado`, `clienteCep`, `clienteTelefone`) VALUES
+(1, 'Diego Antonio Oliveira', 'Rua Adalberto Nascimento 2010', 'Matinha', 'Patrocínio', 'MG', '38742150', '34992510132');
 
 -- --------------------------------------------------------
 
@@ -86,14 +87,21 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 DROP TABLE IF EXISTS `venda`;
 CREATE TABLE IF NOT EXISTS `venda` (
   `idVenda` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_cliente` int(10) UNSIGNED DEFAULT NULL,
+  `fk_cliente` int(11) DEFAULT NULL,
   `vendaData` date NOT NULL,
   `vendaValorLiquido` double NOT NULL,
   `vendaValorTotal` double NOT NULL,
   `vendaDesconto` double NOT NULL,
   PRIMARY KEY (`idVenda`),
-  KEY `fk_cliente` (`fk_cliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `fk_cliente` (`fk_cliente`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `venda`
+--
+
+INSERT INTO `venda` (`idVenda`, `fk_cliente`, `vendaData`, `vendaValorLiquido`, `vendaValorTotal`, `vendaDesconto`) VALUES
+(1, 1, '2023-01-05', 100, 100, 0);
 
 -- --------------------------------------------------------
 
@@ -104,12 +112,31 @@ CREATE TABLE IF NOT EXISTS `venda` (
 DROP TABLE IF EXISTS `vendaproduto`;
 CREATE TABLE IF NOT EXISTS `vendaproduto` (
   `idVendaProduto` int(11) NOT NULL AUTO_INCREMENT,
-  `fk_Produto` int(10) UNSIGNED DEFAULT NULL,
-  `fk_Venda` int(10) UNSIGNED DEFAULT NULL,
+  `fk_Produto` int(10) DEFAULT NULL,
+  `fk_Venda` int(10) DEFAULT NULL,
   `vendaProdutoValor` double NOT NULL,
   `vendaProdutoQtd` int(11) NOT NULL,
-  PRIMARY KEY (`idVendaProduto`)
+  PRIMARY KEY (`idVendaProduto`),
+  KEY `fk_produto` (`fk_Produto`),
+  KEY `fk_venda` (`fk_Venda`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Restrições para despejos de tabelas
+--
+
+--
+-- Limitadores para a tabela `venda`
+--
+ALTER TABLE `venda`
+  ADD CONSTRAINT `venda_ibfk_1` FOREIGN KEY (`fk_cliente`) REFERENCES `cliente` (`idCliente`);
+
+--
+-- Limitadores para a tabela `vendaproduto`
+--
+ALTER TABLE `vendaproduto`
+  ADD CONSTRAINT `vendaproduto_ibfk_2` FOREIGN KEY (`fk_Venda`) REFERENCES `venda` (`idVenda`),
+  ADD CONSTRAINT `vendaproduto_ibfk_1` FOREIGN KEY (`fk_Produto`) REFERENCES `produto` (`idProduto`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
