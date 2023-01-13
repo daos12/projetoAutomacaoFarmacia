@@ -1,5 +1,5 @@
 package DAO;
-import conexao.ConnectionFactory;
+import factory.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import model.ProdutoModel;
@@ -91,6 +91,7 @@ public class ProdutoDAO extends ConnectionFactory{
             stmt.setDouble  (2, produto.getProdutoValor());
             stmt.setInt     (3, produto.getProdutoEstoque());
             stmt.setString  (4, produto.getProdutoObservacao());
+            stmt.setInt     (5, produto.getIdProduto());
             stmt.execute();
             JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
             stmt.close();

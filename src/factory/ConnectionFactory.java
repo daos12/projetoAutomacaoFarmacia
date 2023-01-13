@@ -1,5 +1,5 @@
 // situa em qual package ou "pacote" está a classe 
-package conexao; 
+package factory; 
 // faz as importações de classes necessárias para o funcionamento do programa 
 import java.sql.Connection; 
 // conexão SQL para Java 

@@ -1,6 +1,4 @@
-
 package view;
-
 /**
  *
  * @author daos_
@@ -10,7 +8,6 @@ public class ClienteView extends javax.swing.JFrame {
     public ClienteView() {
         initComponents();
     }
-
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -41,7 +38,7 @@ public class ClienteView extends javax.swing.JFrame {
         jbSalvar = new javax.swing.JButton();
         jbEditar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Código:");
 
