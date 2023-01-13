@@ -45,5 +45,11 @@ public class ProdutoModel {
     public void setProdutoObservacao(String produtoObservacao) {
         this.produtoObservacao = produtoObservacao;
     }
+    
+    //Para retornar no combobox
+    @Override
+    public String toString(){
+        return this.getProdutoNome();
+    }
 
 }
