@@ -1,5 +1,5 @@
 package view;
-import DAO.ProdutoDAO;
+import dao.ProdutoDAO;
 import javax.swing.JOptionPane;
 import model.ProdutoModel;
 import javax.swing.table.DefaultTableModel;

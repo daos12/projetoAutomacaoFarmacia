@@ -1,4 +1,4 @@
-package DAO;
+package dao;
 import factory.ConnectionFactory;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
