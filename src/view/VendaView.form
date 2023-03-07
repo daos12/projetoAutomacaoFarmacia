@@ -60,8 +60,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="uJNomeProdutoAAAAAAAAAA" alignment="0" max="32767" attributes="0"/>
-                          <Component id="uJNomeCliente" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jcbProduto" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jcbCliente" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -133,7 +133,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="txfCodigoCliente" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="uJNomeCliente" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcbCliente" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txfNumeroVenda" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -144,7 +144,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="uJNomeProdutoAAAAAAAAAA" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jcbProduto" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txfCodigoProduto" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txfQuantidade" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -198,9 +198,16 @@
                 <Property name="text" type="java.lang.String" value="C&#xf3;digo Cliente:"/>
               </Properties>
             </Component>
-            <Component class="componentes.UJComboBox" name="uJNomeCliente">
+            <Component class="componentes.UJComboBox" name="jcbCliente">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="Selecione  um Cliente"/>
+                  </StringArray>
+                </Property>
+              </Properties>
               <Events>
-                <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="uJNomeClienteAncestorAdded"/>
+                <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="jcbClienteAncestorAdded"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
@@ -208,10 +215,17 @@
                 <Property name="text" type="java.lang.String" value="Nome do Cliente:"/>
               </Properties>
             </Component>
-            <Component class="componentes.UJComboBox" name="uJNomeProdutoAAAAAAAAAA">
+            <Component class="componentes.UJComboBox" name="jcbProduto">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="Selecione  um Produto"/>
+                  </StringArray>
+                </Property>
+              </Properties>
               <Events>
-                <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="uJNomeProdutoAAAAAAAAAAAncestorAdded"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uJNomeProdutoAAAAAAAAAAActionPerformed"/>
+                <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="jcbProdutoAncestorAdded"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbProdutoActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">

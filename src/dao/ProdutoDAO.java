@@ -24,6 +24,23 @@ public class ProdutoDAO extends ConnectionFactory{
         this.connection = new ConnectionFactory().getConnection();
     }
     
+    //Listagem comboBox
+    public ResultSet listarProduto(){
+        connection = new ConnectionFactory().getConnection();
+        String sql = "SELECT * FROM produto ORDER BY produtoNome;"; //ordem alfabética 
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            return stmt.executeQuery();
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro.");
+            return null;
+        }
+    }
+    
+    
+    
+    
     public List<ProdutoModel> leitura() {
         connection = new ConnectionFactory().getConnection();
         PreparedStatement stmt = null;

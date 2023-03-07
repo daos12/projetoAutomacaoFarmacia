@@ -1,15 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package view;
 
 import javax.swing.JFrame;
 
-/**
- *
- * @author 11053
- */
+import view.ProdutoView;
+
+
 public class MenuInicialView extends javax.swing.JFrame {
 
     /**

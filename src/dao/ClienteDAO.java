@@ -57,6 +57,20 @@ public class ClienteDAO extends ConnectionFactory{
         return clientes;
     }
     
+    //Listagem comboBox
+    public ResultSet listarCliente(){
+        connection = new ConnectionFactory().getConnection();
+        String sql = "SELECT * FROM cliente ORDER BY clienteNome;"; //ordem alfabética 
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            return stmt.executeQuery();
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro.");
+            return null;
+        }
+    }
+    
     
     public void adiciona(ClienteModel cliente){
         String sql = "INSERT INTO cliente(clienteNome,clienteEndereco,clienteBairro,clienteCidade,clienteEstado,clienteCep,clienteTelefone ) VALUES(?,?,?,?,?,?,?)";

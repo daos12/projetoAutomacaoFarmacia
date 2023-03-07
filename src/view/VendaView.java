@@ -1,22 +1,74 @@
 package view;
 
+
+import com.mysql.cj.jdbc.result.ResultSetFactory;
+import com.sun.jdi.connect.spi.Connection;
 import dao.ProdutoDAO;
+import factory.ConnectionFactory;
+import dao.ClienteDAO;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import model.ClienteModel;
 import model.ProdutoModel;
 
 public class VendaView extends javax.swing.JFrame {
+    
 
-  
     
     public VendaView() {
         initComponents();
-    }
-    
-    //Preenche o comboBox de todos os clientes
-    private void lintarCliente(){
+        valoresComboxCliente();
+        valoresComboxProdutos();
         
     }
+   
+    Vector<Integer>idCliente = new Vector<Integer>();
+    //listagem dos valores do comboBox cliente
+    public void valoresComboxCliente(){
+        try {
+            java.sql.Connection connection = new ConnectionFactory().getConnection();
+            ClienteDAO clienteDao = new ClienteDAO();
+            connection = new ConnectionFactory().getConnection();
+            ResultSet rs = clienteDao.listarCliente();
+            
+            while (rs.next()) {
+                idCliente.addElement(rs.getInt(1));
+                jcbCliente.addItem(rs.getString(2));
+            }
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro");
+        }
+    }
+    
+    
+    
+    Vector<Integer>idProdutos = new Vector<Integer>();
+    //listagem dos valores do comboBox cliente
+    public void valoresComboxProdutos(){
+        try {
+            java.sql.Connection connection = new ConnectionFactory().getConnection();
+            ProdutoDAO produtoDao = new ProdutoDAO();
+            connection = new ConnectionFactory().getConnection();
+            ResultSet rs = produtoDao.listarProduto();
+            
+            while (rs.next()) {
+                idProdutos.addElement(rs.getInt(1));
+                jcbProduto.addItem(rs.getString(2));
+            }
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro");
+        }
+    }
+    
+    
+    
+    
     
 
     @SuppressWarnings("unchecked")
@@ -27,9 +79,9 @@ public class VendaView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         txfCodigoCliente = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        uJNomeCliente = new componentes.UJComboBox();
+        jcbCliente = new componentes.UJComboBox();
         jLabel2 = new javax.swing.JLabel();
-        uJNomeProdutoAAAAAAAAAA = new componentes.UJComboBox();
+        jcbProduto = new componentes.UJComboBox();
         jLabel5 = new javax.swing.JLabel();
         txfNumeroVenda = new javax.swing.JTextField();
         txfCodigoProduto = new javax.swing.JTextField();
@@ -69,9 +121,10 @@ public class VendaView extends javax.swing.JFrame {
 
         jLabel1.setText("Código Cliente:");
 
-        uJNomeCliente.addAncestorListener(new javax.swing.event.AncestorListener() {
+        jcbCliente.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione  um Cliente" }));
+        jcbCliente.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                uJNomeClienteAncestorAdded(evt);
+                jcbClienteAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -81,18 +134,19 @@ public class VendaView extends javax.swing.JFrame {
 
         jLabel2.setText("Nome do Cliente:");
 
-        uJNomeProdutoAAAAAAAAAA.addAncestorListener(new javax.swing.event.AncestorListener() {
+        jcbProduto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione  um Produto" }));
+        jcbProduto.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                uJNomeProdutoAAAAAAAAAAAncestorAdded(evt);
+                jcbProdutoAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        uJNomeProdutoAAAAAAAAAA.addActionListener(new java.awt.event.ActionListener() {
+        jcbProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                uJNomeProdutoAAAAAAAAAAActionPerformed(evt);
+                jcbProdutoActionPerformed(evt);
             }
         });
 
@@ -213,8 +267,8 @@ public class VendaView extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(uJNomeProdutoAAAAAAAAAA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(uJNomeCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jcbProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jcbCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -271,7 +325,7 @@ public class VendaView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txfCodigoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(uJNomeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txfNumeroVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -280,7 +334,7 @@ public class VendaView extends javax.swing.JFrame {
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(uJNomeProdutoAAAAAAAAAA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txfCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -574,21 +628,21 @@ public class VendaView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jbExcluir1ActionPerformed
 
-    private void uJNomeClienteAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_uJNomeClienteAncestorAdded
+    private void jcbClienteAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jcbClienteAncestorAdded
         
         
         
-    }//GEN-LAST:event_uJNomeClienteAncestorAdded
+    }//GEN-LAST:event_jcbClienteAncestorAdded
 
-    private void uJNomeProdutoAAAAAAAAAAAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_uJNomeProdutoAAAAAAAAAAAncestorAdded
+    private void jcbProdutoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jcbProdutoAncestorAdded
         
         
         
-    }//GEN-LAST:event_uJNomeProdutoAAAAAAAAAAAncestorAdded
+    }//GEN-LAST:event_jcbProdutoAncestorAdded
 
-    private void uJNomeProdutoAAAAAAAAAAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uJNomeProdutoAAAAAAAAAAActionPerformed
+    private void jcbProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProdutoActionPerformed
        
-    }//GEN-LAST:event_uJNomeProdutoAAAAAAAAAAActionPerformed
+    }//GEN-LAST:event_jcbProdutoActionPerformed
 
     private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
         // TODO add your handling code here:
@@ -657,6 +711,8 @@ public class VendaView extends javax.swing.JFrame {
     private javax.swing.JButton jbPesquisar;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JButton jbSalvar1;
+    private componentes.UJComboBox jcbCliente;
+    private componentes.UJComboBox jcbProduto;
     private javax.swing.JTable jtProdutoVenda;
     private javax.swing.JTable jtVendas;
     private javax.swing.JTextField txfCodigoCliente;
@@ -666,7 +722,5 @@ public class VendaView extends javax.swing.JFrame {
     private javax.swing.JTextField txfPesquisa;
     private javax.swing.JTextField txfQuantidade;
     private javax.swing.JTextField txfTotal;
-    private componentes.UJComboBox uJNomeCliente;
-    private componentes.UJComboBox uJNomeProdutoAAAAAAAAAA;
     // End of variables declaration//GEN-END:variables
 }
