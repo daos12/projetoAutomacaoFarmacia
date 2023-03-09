@@ -1,6 +1,5 @@
 package view;
 
-
 import com.mysql.cj.jdbc.result.ResultSetFactory;
 import com.sun.jdi.connect.spi.Connection;
 import dao.ProdutoDAO;
@@ -12,64 +11,89 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.ClienteModel;
 import model.ProdutoModel;
 
 public class VendaView extends javax.swing.JFrame {
-    
 
-    
     public VendaView() {
         initComponents();
         valoresComboxCliente();
         valoresComboxProdutos();
-        
+
     }
-   
-    Vector<Integer>idCliente = new Vector<Integer>();
+
     //listagem dos valores do comboBox cliente
-    public void valoresComboxCliente(){
+    public void valoresComboxCliente() {
+        Vector<Integer> idCliente = new Vector<Integer>();
         try {
             java.sql.Connection connection = new ConnectionFactory().getConnection();
             ClienteDAO clienteDao = new ClienteDAO();
             connection = new ConnectionFactory().getConnection();
             ResultSet rs = clienteDao.listarCliente();
-            
+
             while (rs.next()) {
                 idCliente.addElement(rs.getInt(1));
                 jcbCliente.addItem(rs.getString(2));
             }
-            
+
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro");
         }
     }
-    
-    
-    
-    Vector<Integer>idProdutos = new Vector<Integer>();
+
     //listagem dos valores do comboBox cliente
-    public void valoresComboxProdutos(){
+    public void valoresComboxProdutos() {
+        Vector<Integer> idProdutos = new Vector<Integer>();
         try {
             java.sql.Connection connection = new ConnectionFactory().getConnection();
             ProdutoDAO produtoDao = new ProdutoDAO();
             connection = new ConnectionFactory().getConnection();
             ResultSet rs = produtoDao.listarProduto();
-            
+
             while (rs.next()) {
                 idProdutos.addElement(rs.getInt(1));
                 jcbProduto.addItem(rs.getString(2));
             }
-            
+
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, "Ocorreu um erro");
         }
     }
-    
-    
-    
-    
-    
+
+    public void limpaCampos() {
+        txfCodigoCliente.setText("");
+        txfCodigoProduto.setText("");
+        txfDesconto.setText("");
+        txfNumeroVenda.setText("");
+        txfPesquisa.setText("");
+        txfTotal.setText("");
+        txfQuantidade.setText("");
+        jcbCliente.setSelectedIndex(0);
+        jcbProduto.setSelectedIndex(0);
+
+    }
+
+    private void somarValorTotalProdutos() {
+        double soma = 0, valor;
+        int cont = jtProdutoVenda.getRowCount();
+        for (int i = 0; i < cont; i++) {
+            valor = (double) jtProdutoVenda.getValueAt(i, 4);
+            soma = soma + valor;
+        }
+        txfTotal.setText(String.valueOf(soma));
+        aplicarDescontos();
+    }
+
+    //aplica desconto
+    private void aplicarDescontos() {
+        try {
+            txfTotal.setText(String.valueOf(
+                                Double.parseDouble(txfTotal.getText()) - Double.parseDouble(txfDesconto.getText())));
+        } catch (NumberFormatException e) {
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -203,7 +227,7 @@ public class VendaView extends javax.swing.JFrame {
         });
 
         jbExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/imgExcluir.png"))); // NOI18N
-        jbExcluir.setText("Excluir");
+        jbExcluir.setText("Remover produto");
         jbExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbExcluirActionPerformed(evt);
@@ -510,30 +534,10 @@ public class VendaView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExcluirActionPerformed
-//        if (jtProduto.getSelectedRow() != -1) {
-//            // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
-//            ProdutoModel produto = new ProdutoModel();
-//            produto.setIdProduto((int) jtProduto.getValueAt(jtProduto.getSelectedRow(), 0)); //somente id
-//
-//            // fazendo a validação dos dados
-//            if ((txfNome.getText().isEmpty())) {
-//                JOptionPane.showMessageDialog(null, "O campo não pode retornar vazio");
-//            } else {
-//
-//                // instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
-//                ProdutoDAO dao = new ProdutoDAO();
-//                dao.delete(produto);
-//                //JOptionPane.showMessageDialog(null, "Estado " + txfNomeEstado.getText() + " atualizado com sucesso! ");
-//            }
-//
-//            // apaga os dados preenchidos nos campos de texto
-//            limpaCampos();
-//            // atualiza JTable
-//            leiaJTable();
-//
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Selecione um produto para excluir.");
-//        }
+        int linha = jtProdutoVenda.getSelectedRow();
+        DefaultTableModel modelo = (DefaultTableModel) jtProdutoVenda.getModel();
+        modelo.removeRow(linha);
+        somarValorTotalProdutos();
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
@@ -593,19 +597,19 @@ public class VendaView extends javax.swing.JFrame {
 //        leiaJTable();
 //        habilitaDesabilita(false);
 //        botaoSalvar(false);
-          
+
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNovoActionPerformed
-//        limpaCampos();
+        limpaCampos();
 //        habilitaDesabilita(true);
 //        botaoSalvar(true);
     }//GEN-LAST:event_jbNovoActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed
-//        limpaCampos();
-//        habilitaDesabilita(false);
-//        botaoSalvar(false);
+        limpaCampos();
+        //habilitaDesabilita(false);
+        //botaoSalvar(false);
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelar1ActionPerformed
@@ -629,28 +633,24 @@ public class VendaView extends javax.swing.JFrame {
     }//GEN-LAST:event_jbExcluir1ActionPerformed
 
     private void jcbClienteAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jcbClienteAncestorAdded
-        
-        
-        
+
+
     }//GEN-LAST:event_jcbClienteAncestorAdded
 
     private void jcbProdutoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jcbProdutoAncestorAdded
-        
-        
-        
+
+
     }//GEN-LAST:event_jcbProdutoAncestorAdded
 
     private void jcbProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProdutoActionPerformed
-       
+
     }//GEN-LAST:event_jcbProdutoActionPerformed
 
     private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
-        // TODO add your handling code here:
+        
+
     }//GEN-LAST:event_jbAdicionarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

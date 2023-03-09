@@ -1,13 +1,19 @@
 package view;
 import dao.ClienteDAO;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import model.ClienteModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import util.Formatador;
 
 public class ClienteView extends javax.swing.JFrame {
     
     Formatador formatador = new Formatador(); //converter ',' para '.' para inserção no bando de dados
+    private DefaultTableModel tabela; //Para criar a opção de pesquisa
+    private TableRowSorter<TableModel> sorter; //Para criar a opção de pesquisa
+//    private javax.swing.JComboBox<String> jcbPesquisa; //Para criar a opção de pesquisa
     
     public ClienteView() {
         initComponents();
@@ -17,7 +23,7 @@ public class ClienteView extends javax.swing.JFrame {
         
     }
 
-    
+
     
     //busca as informações do bando de dados para a tabela jtable
     public void leiaJTable() {
@@ -72,6 +78,7 @@ public class ClienteView extends javax.swing.JFrame {
         txfTelefone = new javax.swing.JFormattedTextField();
         jLabel12 = new javax.swing.JLabel();
         txfEndereco = new javax.swing.JTextField();
+        jcbPesquisa = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Controle de Clientes - DaosSystem");
@@ -204,6 +211,11 @@ public class ClienteView extends javax.swing.JFrame {
 
         jbPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/imgPesquisar.png"))); // NOI18N
         jbPesquisar.setText("Pesquisar");
+        jbPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbPesquisarActionPerformed(evt);
+            }
+        });
 
         txfBairro.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
 
@@ -233,6 +245,8 @@ public class ClienteView extends javax.swing.JFrame {
         }
 
         jLabel12.setText("Telefone:");
+
+        jcbPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -289,7 +303,9 @@ public class ClienteView extends javax.swing.JFrame {
                 .addComponent(txfPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jbPesquisar)
-                .addGap(269, 269, 269))
+                .addGap(41, 41, 41)
+                .addComponent(jcbPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(156, 156, 156))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,7 +354,8 @@ public class ClienteView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txfPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbPesquisar))
+                    .addComponent(jbPesquisar)
+                    .addComponent(jcbPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -485,6 +502,10 @@ public class ClienteView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtClienteMouseClicked
 
+    private void jbPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPesquisarActionPerformed
+
+    }//GEN-LAST:event_jbPesquisarActionPerformed
+
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -508,7 +529,6 @@ public class ClienteView extends javax.swing.JFrame {
     public void botaoSalvar(boolean condicao){
         jbSalvar.setEnabled(condicao);
     }
-
     
     public void limpaCampos(){
         txfNome.setText("");
@@ -544,6 +564,7 @@ public class ClienteView extends javax.swing.JFrame {
     private javax.swing.JButton jbPesquisar;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JComboBox<String> jcbEstados;
+    private javax.swing.JComboBox<String> jcbPesquisa;
     private javax.swing.JTable jtCliente;
     private javax.swing.JFormattedTextField txfBairro;
     private javax.swing.JFormattedTextField txfCep;

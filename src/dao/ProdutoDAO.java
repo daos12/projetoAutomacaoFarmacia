@@ -40,7 +40,7 @@ public class ProdutoDAO extends ConnectionFactory{
     
     
     
-    
+    //listagem tabela
     public List<ProdutoModel> leitura() {
         connection = new ConnectionFactory().getConnection();
         PreparedStatement stmt = null;
