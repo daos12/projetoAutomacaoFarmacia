@@ -1,19 +1,13 @@
 package view;
 
-import com.mysql.cj.jdbc.result.ResultSetFactory;
-import com.sun.jdi.connect.spi.Connection;
 import dao.ProdutoDAO;
 import factory.ConnectionFactory;
 import dao.ClienteDAO;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.ClienteModel;
-import model.ProdutoModel;
+
 
 public class VendaView extends javax.swing.JFrame {
 
