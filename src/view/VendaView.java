@@ -7,9 +7,13 @@ import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.VendaProdutoModel;
+import util.Formatador;
 
 
 public class VendaView extends javax.swing.JFrame {
+    
+    Formatador formatador = new Formatador(); //converter ',' para '.' para inserção no bando de dados
 
     public VendaView() {
         initComponents();
@@ -566,31 +570,31 @@ public class VendaView extends javax.swing.JFrame {
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
 
-//        // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
-//        ProdutoModel produto = new ProdutoModel();
-//        produto.setProdutoNome      (txfNome.getText());
-//        produto.setProdutoEstoque   (Integer.parseInt((txfEstoque.getText())));
-//        produto.setProdutoValor     (formatador.converterVirgula(txfValor.getText())); //conversor ',' em '.'
-//        produto.setProdutoObservacao(txfNome.getText());
-//
-//        // fazendo a validação dos dados
-//        if ((txfNome.getText().isEmpty())|(txfEstoque.getText().isEmpty())|(txfValor.getText().isEmpty())) {
-//            JOptionPane.showMessageDialog(null, "O campo não pode ficar/retornar vazio");
-//        } else {
-//
-//            // instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
-//            ProdutoDAO dao = new ProdutoDAO();
-//            dao.adiciona(produto);
-//            JOptionPane.showMessageDialog(null, "Produto " + txfNome.getText() + " inserido com sucesso! ");
-//        }
-//
-//        // apaga os dados preenchidos nos campos de texto
-//        limpaCampos();
-//
-//        // atualiza JTable
-//        leiaJTable();
-//        habilitaDesabilita(false);
-//        botaoSalvar(false);
+        // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
+        VendaProdutoModel vendaProduto = new VendaProdutoModel();
+        vendaProduto.setFk_Produto          (Integer.parseInt(txfCodigoCliente.getText()));
+        vendaProduto.setFk_Venda            (Integer.parseInt((txfCodigoProduto.getText())));
+        vendaProduto.setVendaProdutoValor   (formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
+        vendaProduto.setVendaProdutoQtd     (Integer.parseInt(txfQuantidade.getText()));
+
+        // fazendo a validação dos dados
+        if ((txfNome.getText().isEmpty())|(txfEstoque.getText().isEmpty())|(txfValor.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "O campo não pode ficar/retornar vazio");
+        } else {
+
+            // instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
+            ProdutoDAO dao = new ProdutoDAO();
+            dao.adiciona(produto);
+            JOptionPane.showMessageDialog(null, "Produto " + txfNome.getText() + " inserido com sucesso! ");
+        }
+
+        // apaga os dados preenchidos nos campos de texto
+        limpaCampos();
+
+        // atualiza JTable
+        leiaJTable();
+        habilitaDesabilita(false);
+        botaoSalvar(false);
 
     }//GEN-LAST:event_jbSalvarActionPerformed
 
