@@ -22,6 +22,9 @@ public class VendaDAO extends ConnectionFactory{
     private Double vendaValorTotal;
     private Double vendaDesconto;
 
+    
+    
+    
     public VendaDAO() {
         this.connection = new ConnectionFactory().getConnection();
     }
@@ -53,32 +56,7 @@ public class VendaDAO extends ConnectionFactory{
         }
         return vendas;
     }
-    
-    //teste para adicionar infos na tabela
-    class VendaTableModel extends DefaultTableModel {
 
-        public VendaTableModel() {
-            this.addColumn("idVenda");
-            this.addColumn("fk_cliente");
-//        this.addColumn("vendaData");
-            this.addColumn("vendaValorLiquido");
-            this.addColumn("vendaValorTotal");
-            this.addColumn("vendaDesconto");
-        }
-
-        public VendaTableModel(List<VendaModel> listVendas) {
-            this();
-            for (VendaModel v : listVendas) {
-                this.addRow(new String[]{String.valueOf(v.getIdVenda()), String.valueOf(v.getFk_cliente()),
-                    String.valueOf(v.getVendaValorLiquido()), String.valueOf(v.getVendaValorTotal()),
-                    String.valueOf(v.getVendaDesconto())
-                });
-            }
-        }
-    }
-    
-    
-    
     
     
     public void adiciona(VendaModel venda){

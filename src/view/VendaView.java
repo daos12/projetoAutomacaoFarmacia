@@ -3,6 +3,7 @@ package view;
 import dao.ProdutoDAO;
 import factory.ConnectionFactory;
 import dao.ClienteDAO;
+import dao.VendaDAO;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -64,14 +65,7 @@ public class VendaView extends javax.swing.JFrame {
         }
     }
     
-    //tentativa de listagem tabela
-//    public void testeTabela(){
-//        VendaModel teste = new VendaModel();
-//        
-//        List<VendaModel> listVendas = buscaVendas();
-//        VendaTableModel model = new VendaTableModel(listVendas);
-//        jtProdutoVenda.setModel(model);
-//    }
+
 
     public void limpaCampos() {
         txfCodigoCliente.setText("");
