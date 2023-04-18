@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class VendaModel {
     private int idVenda;
-    private int fk_cliente ;
+    private int idCliente ;
     private Date vendaData;
     private Double vendaValorLiquido;
     private Double vendaValorTotal;
@@ -18,12 +18,12 @@ public class VendaModel {
         this.idVenda = idVenda;
     }
 
-    public int getFk_cliente() {
-        return fk_cliente;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public void setFk_cliente(int fk_cliente) {
-        this.fk_cliente = fk_cliente;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public Date getVendaData() {
