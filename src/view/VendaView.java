@@ -3,91 +3,64 @@ package view;
 import dao.ProdutoDAO;
 import factory.ConnectionFactory;
 import dao.ClienteDAO;
+import dao.VendaDAO;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
-import model.VendaProdutoModel;
 import model.VendaModel;
 import util.Formatador;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
-
-
+import model.ProdutoModel;
 
 public class VendaView extends javax.swing.JFrame {
-    
-    Formatador formatador = new Formatador(); //converter ',' para '.' para inserção no bando de dados
 
     public VendaView() {
         initComponents();
-        valoresComboxCliente();
-        valoresComboxProdutos();
+        leiaJTable();
 
     }
 
-    //listagem dos valores do comboBox cliente
-    public void valoresComboxCliente() {
-        Vector<Integer> idCliente = new Vector<Integer>();
-        try {
-            java.sql.Connection connection = new ConnectionFactory().getConnection();
-            ClienteDAO clienteDao = new ClienteDAO();
-            connection = new ConnectionFactory().getConnection();
-            ResultSet rs = clienteDao.listarCliente();
+    Formatador formatador = new Formatador(); //converter ',' para '.' para inserção no bando de dados
+ 
+//Tratamento data e hora para a venda
+    Date dataHoraAtual = new Date();
+    String data = new SimpleDateFormat("yyyy/MM/dd").format(dataHoraAtual);
+    String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
 
-            while (rs.next()) {
-                idCliente.addElement(rs.getInt(1));
-                jcbCliente.addItem(rs.getString(2));
-            }
 
-        } catch (Exception erro) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro");
-        }
-    }
+    
+//busca as informações do bando de dados para a tabela jtable
+    public void leiaJTable() {
+        DefaultTableModel modelo = (DefaultTableModel) jtProdutoVenda.getModel();
+        modelo.setNumRows(0);//evida duplicar os resultadas ao cadastrar um item
+        VendaDAO dao = new VendaDAO();
 
-    //listagem dos valores do comboBox cliente
-    public void valoresComboxProdutos() {
-        Vector<Integer> idProdutos = new Vector<Integer>();
-        try {
-            java.sql.Connection connection = new ConnectionFactory().getConnection();
-            ProdutoDAO produtoDao = new ProdutoDAO();
-            connection = new ConnectionFactory().getConnection();
-            ResultSet rs = produtoDao.listarProduto();
-
-            while (rs.next()) {
-                idProdutos.addElement(rs.getInt(1));
-                jcbProduto.addItem(rs.getString(2));
-            }
-
-        } catch (Exception erro) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro");
+        for (VendaModel venda : dao.leitura()) {
+            modelo.addRow(new Object[]{
+                venda.getIdVenda(),
+                venda.getIdCliente(),
+                venda.getVendaData(),
+                venda.getVendaValorTotal(),
+                venda.getVendaDesconto(),
+                venda.getIdProduto(),
+                venda.getQuantidade()
+                
+            });
         }
     }
     
-
 
     public void limpaCampos() {
         txfCodigoCliente.setText("");
         txfCodigoProduto.setText("");
-        txfDesconto.setText("");
-        txfNumeroVenda.setText("");
-        txfPesquisa.setText("");
-        txfTotal.setText("");
+        txfValorProduto.setText("");
         txfQuantidade.setText("");
-        jcbCliente.setSelectedIndex(0);
-        jcbProduto.setSelectedIndex(0);
+        txfDesconto.setText("");
+        txfTotal.setText("");
 
-    }
 
-    private void somarValorTotalProdutos() {
-        double soma = 0, valor;
-        int cont = jtProdutoVenda.getRowCount();
-        for (int i = 0; i < cont; i++) {
-            valor = (double) jtProdutoVenda.getValueAt(i, 4);
-            soma = soma + valor;
-        }
-        txfTotal.setText(String.valueOf(soma));
-        aplicarDescontos();
     }
 
     //aplica desconto
@@ -107,14 +80,8 @@ public class VendaView extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         txfCodigoCliente = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jcbCliente = new componentes.UJComboBox();
-        jLabel2 = new javax.swing.JLabel();
-        jcbProduto = new componentes.UJComboBox();
-        jLabel5 = new javax.swing.JLabel();
-        txfNumeroVenda = new javax.swing.JTextField();
         txfCodigoProduto = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         txfQuantidade = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
@@ -132,6 +99,9 @@ public class VendaView extends javax.swing.JFrame {
         jbAdicionar = new javax.swing.JButton();
         txfValorProduto = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        txfDataaaa = new javax.swing.JFormattedTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txfData = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         txfPesquisa = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -149,40 +119,7 @@ public class VendaView extends javax.swing.JFrame {
 
         jLabel1.setText("Código Cliente:");
 
-        jcbCliente.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione  um Cliente" }));
-        jcbCliente.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jcbClienteAncestorAdded(evt);
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-
-        jLabel2.setText("Nome do Cliente:");
-
-        jcbProduto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione  um Produto" }));
-        jcbProduto.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jcbProdutoAncestorAdded(evt);
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-        jcbProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbProdutoActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Nome do Produto:");
-
         jLabel6.setText("Código Produto:");
-
-        jLabel7.setText("Número da Venda:");
 
         jLabel8.setText("Quantidade:");
 
@@ -247,15 +184,20 @@ public class VendaView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Cód. Produto", "Nome Produto", "Quantidade", "Valor Unitario", "Valor Total"
+                "Id Venda", "idCliente ", "Data Venda", "ValorTotal", "Desconto", "idProduto", "Quantidade"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jtProdutoVenda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtProdutoVendaMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jtProdutoVenda);
@@ -284,6 +226,14 @@ public class VendaView extends javax.swing.JFrame {
 
         jLabel12.setText("Valor Produto");
 
+        try {
+            txfDataaaa.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####/##/##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        jLabel13.setText("Data:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -295,27 +245,26 @@ public class VendaView extends javax.swing.JFrame {
                     .addComponent(txfCodigoCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                     .addComponent(txfCodigoProduto)
                     .addComponent(jLabel6))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jcbCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jcbProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12)
-                            .addComponent(txfValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txfNumeroVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(txfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40))
+                            .addComponent(txfValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(txfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(239, 239, 239)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txfData, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txfDataaaa, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,26 +301,27 @@ public class VendaView extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel7))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel13)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txfCodigoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jcbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txfNumeroVenda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txfDataaaa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
                             .addComponent(jLabel6)
                             .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jcbProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txfCodigoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
@@ -555,66 +505,75 @@ public class VendaView extends javax.swing.JFrame {
         int linha = jtProdutoVenda.getSelectedRow();
         DefaultTableModel modelo = (DefaultTableModel) jtProdutoVenda.getModel();
         modelo.removeRow(linha);
-        somarValorTotalProdutos();
+        //somarValorTotalProdutos();
     }//GEN-LAST:event_jbExcluirActionPerformed
 
     private void jbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarActionPerformed
-//        habilitaDesabilita(true);
-//        if (jtProduto.getSelectedRow() != -1) {
-//            // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
-//            ProdutoModel produto = new ProdutoModel();
-//            produto.setIdProduto        ((int) jtProduto.getValueAt(jtProduto.getSelectedRow(), 0));
-//            produto.setProdutoNome      (txfNome.getText());
-//            produto.setProdutoValor     (formatador.converterVirgula(txfValor.getText())); //conversor ',' em '.'
-//            produto.setProdutoEstoque   (Integer.parseInt(txfEstoque.getText()));
-//            produto.setProdutoObservacao(txfObservacao.getText());
-//
-//            // fazendo a validação dos dados
-//            if ((txfNome.getText().isEmpty())|(txfEstoque.getText().isEmpty())|(txfValor.getText().isEmpty())) {
-//                JOptionPane.showMessageDialog(null, "O campo não pode retornar vazio");
-//            } else {
-//
-//                // instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
-//                ProdutoDAO dao = new ProdutoDAO();
-//                dao.update(produto);
-//                JOptionPane.showMessageDialog(null, "Produto " + txfNome.getText() + " atualizado com sucesso! ");
-//            }
-//
-//            // apaga os dados preenchidos nos campos de texto
-//            limpaCampos();
-//
-//            // atualiza JTable
-//            leiaJTable();
-//        }
+        //habilitaDesabilita(true);
+        if (jtProdutoVenda.getSelectedRow() != -1) {
+            // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
+            VendaModel venda = new VendaModel();
+            venda.setIdVenda            ((int) jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 0));
+            venda.setIdCliente          (Integer.parseInt(txfCodigoCliente.getText()));
+            venda.setVendaData          (new java.sql.Date(System.currentTimeMillis()));
+            venda.setVendaValorLiquido  (Double.parseDouble(txfValorProduto.getText())); //(formatador.converterVirgula(txfValorProduto.getText())); //conversor ',' em '.'
+            venda.setVendaValorTotal    (Double.parseDouble(txfTotal.getText())); //(formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
+            venda.setVendaDesconto      (Double.parseDouble(txfDesconto.getText())); //(formatador.converterVirgula(txfDesconto.getText())); //conversor ',' em '.'
+            venda.setIdProduto          (Integer.parseInt(txfCodigoProduto.getText()));       
+            venda.setQuantidade         (Integer.parseInt(txfQuantidade.getText()));       
+ 
+
+// fazendo a validação dos dados
+            if ((txfCodigoCliente.getText().isEmpty())|(txfTotal.getText().isEmpty())|(txfCodigoProduto.getText().isEmpty())) {
+                JOptionPane.showMessageDialog(null, "O campo não pode retornar vazio");
+            } else {
+
+                // instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
+                VendaDAO dao = new VendaDAO();
+                dao.update(venda);
+                JOptionPane.showMessageDialog(null, "Venda " + txfCodigoProduto.getText() + " atualizada com sucesso! ");
+            }
+
+            // apaga os dados preenchidos nos campos de texto
+            limpaCampos();
+
+            // atualiza JTable
+            leiaJTable();
+        }
     }//GEN-LAST:event_jbEditarActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
 
-        // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
-        VendaProdutoModel vendaProduto = new VendaProdutoModel();
-        vendaProduto.setFk_Produto          (Integer.parseInt(txfCodigoCliente.getText()));
-        vendaProduto.setFk_Venda            (Integer.parseInt((txfCodigoProduto.getText())));
-        vendaProduto.setVendaProdutoValor   (formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
-        vendaProduto.setVendaProdutoQtd     (Integer.parseInt(txfQuantidade.getText()));
+// instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
+        VendaModel venda = new VendaModel();
+        venda.setIdCliente          (Integer.parseInt(txfCodigoCliente.getText()));
+        venda.setVendaData          (new java.sql.Date(System.currentTimeMillis()));
+        venda.setVendaValorLiquido  (formatador.converterVirgula(txfValorProduto.getText())); //conversor ',' em '.'
+        venda.setVendaValorTotal    (formatador.converterVirgula(txfTotal.getText()));
+        venda.setVendaDesconto      (formatador.converterVirgula(txfDesconto.getText()));
+        venda.setIdProduto          (Integer.parseInt(txfCodigoProduto.getText()));
+        venda.setQuantidade         (Integer.parseInt(txfQuantidade.getText()));
 
-//        // fazendo a validação dos dados
-//        if ((txfNome.getText().isEmpty())|(txfEstoque.getText().isEmpty())|(txfValor.getText().isEmpty())) {
-//            JOptionPane.showMessageDialog(null, "O campo não pode ficar/retornar vazio");
-//        } else {
-//
-//            // instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
-//            ProdutoDAO dao = new ProdutoDAO();
-//            dao.adiciona(produto);
-//            JOptionPane.showMessageDialog(null, "Produto " + txfNome.getText() + " inserido com sucesso! ");
-//        }
-//
-//        // apaga os dados preenchidos nos campos de texto
-//        limpaCampos();
-//
-//        // atualiza JTable
-//        leiaJTable();
+// fazendo a validação dos dados
+        if ((txfCodigoCliente.getText().isEmpty()) | (txfValorProduto.getText().isEmpty()) | (txfTotal.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "O campo não pode ficar/retornar vazio");
+        } else {
+
+// instanciando a classe UsuarioDAO do pacote dao e criando seu objeto dao
+            VendaDAO dao = new VendaDAO();
+            dao.adiciona(venda);
+            JOptionPane.showMessageDialog(null, "Produto " + txfCodigoProduto.getText() + " inserido com sucesso! ");
+        }
+
+// apaga os dados preenchidos nos campos de texto
+        limpaCampos();
+
+// atualiza JTable
+        leiaJTable();
 //        habilitaDesabilita(false);
 //        botaoSalvar(false);
+    
+
 
     }//GEN-LAST:event_jbSalvarActionPerformed
 
@@ -650,36 +609,32 @@ public class VendaView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jbExcluir1ActionPerformed
 
-    private void jcbClienteAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jcbClienteAncestorAdded
-
-
-    }//GEN-LAST:event_jcbClienteAncestorAdded
-
-    private void jcbProdutoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jcbProdutoAncestorAdded
-
-
-    }//GEN-LAST:event_jcbProdutoAncestorAdded
-
-    private void jcbProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbProdutoActionPerformed
-
-    }//GEN-LAST:event_jcbProdutoActionPerformed
-
     private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
         
-        //Tratamento data e hora cadastro
-        Date dataHoraAtual = new Date();
-        String data = new SimpleDateFormat("yyyy/MM/dd").format(dataHoraAtual);
-        String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
-        //JOptionPane.showConfirmDialog(null, data);
-        
-        VendaModel venda = new VendaModel();
-        venda.setFk_cliente         (Integer.parseInt(txfCodigoCliente.getText()));
-        venda.setVendaData          (new java.sql.Date(System.currentTimeMillis())); //Data exata da venda
-        venda.setVendaValorLiquido  (formatador.converterVirgula(txfValorProduto.getText())); //conversor ',' em '.'
-        venda.setVendaValorTotal    (formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
-        venda.setVendaDesconto      (formatador.converterVirgula(txfDesconto.getText())); //conversor ',' em '.'
+//        //Tratamento data e hora cadastro
+//        Date dataHoraAtual = new Date();
+//        String data = new SimpleDateFormat("yyyy/MM/dd").format(dataHoraAtual);
+//        String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+//        //JOptionPane.showConfirmDialog(null, data);
+//        
+//        VendaModel venda = new VendaModel();
+//        //venda.setFk_cliente         (Integer.parseInt(txfCodigoCliente.getText()));
+//        venda.setVendaData          (new java.sql.Date(System.currentTimeMillis())); //Data exata da venda
+//        venda.setVendaValorLiquido  (formatador.converterVirgula(txfValorProduto.getText())); //conversor ',' em '.'
+//        venda.setVendaValorTotal    (formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
+//        venda.setVendaDesconto      (formatador.converterVirgula(txfDesconto.getText())); //conversor ',' em '.'
 
     }//GEN-LAST:event_jbAdicionarActionPerformed
+
+    private void jtProdutoVendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtProdutoVendaMouseClicked
+        if (jtProdutoVenda.getSelectedRow() != -1) {
+            //txfData.setText             (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 2).toString());
+            txfTotal.setText            (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 3).toString());
+            txfDesconto.setText         (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 4).toString());
+            txfCodigoProduto.setText    (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 5).toString());
+            txfQuantidade.setText       (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 6).toString());
+        }
+    }//GEN-LAST:event_jtProdutoVendaMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -692,16 +647,28 @@ public class VendaView extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VendaView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VendaView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VendaView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VendaView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VendaView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(VendaView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(VendaView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(VendaView.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -721,10 +688,8 @@ public class VendaView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -745,14 +710,13 @@ public class VendaView extends javax.swing.JFrame {
     private javax.swing.JButton jbPesquisar;
     private javax.swing.JButton jbSalvar;
     private javax.swing.JButton jbSalvar1;
-    private componentes.UJComboBox jcbCliente;
-    private componentes.UJComboBox jcbProduto;
     private javax.swing.JTable jtProdutoVenda;
     private javax.swing.JTable jtVendas;
     private javax.swing.JTextField txfCodigoCliente;
     private javax.swing.JTextField txfCodigoProduto;
+    private javax.swing.JTextField txfData;
+    private javax.swing.JFormattedTextField txfDataaaa;
     private javax.swing.JTextField txfDesconto;
-    private javax.swing.JTextField txfNumeroVenda;
     private javax.swing.JTextField txfPesquisa;
     private javax.swing.JTextField txfQuantidade;
     private javax.swing.JTextField txfTotal;

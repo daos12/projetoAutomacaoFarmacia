@@ -9,6 +9,8 @@ public class VendaModel {
     private Double vendaValorLiquido;
     private Double vendaValorTotal;
     private Double vendaDesconto;
+    private int idProduto;
+    private int quantidade;
 
     public int getIdVenda() {
         return idVenda;
@@ -57,6 +59,27 @@ public class VendaModel {
     public void setVendaDesconto(Double vendaDesconto) {
         this.vendaDesconto = vendaDesconto;
     }
+
+    public int getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+    
+    
+    
+    
+    
     
     
 

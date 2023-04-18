@@ -77,6 +77,12 @@ public class ProdutoView extends javax.swing.JFrame {
 
         jLabel5.setText("Bula/Informações:");
 
+        txfObservacao.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txfObservacaoMouseClicked(evt);
+            }
+        });
+
         jbCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/imgCancelar.png"))); // NOI18N
         jbCancelar.setText("Cancelar");
         jbCancelar.setToolTipText("");
@@ -396,6 +402,10 @@ public class ProdutoView extends javax.swing.JFrame {
         habilitaDesabilita(false);
         botaoSalvar(false);
     }//GEN-LAST:event_jbCancelarActionPerformed
+
+    private void txfObservacaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txfObservacaoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txfObservacaoMouseClicked
 
     public static void main(String args[]) {
         

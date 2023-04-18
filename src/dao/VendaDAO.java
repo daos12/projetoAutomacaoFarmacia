@@ -22,6 +22,7 @@ public class VendaDAO extends ConnectionFactory{
     private Double vendaValorTotal;
     private Double vendaDesconto;
     private int idProduto;
+    private int quantidade;
 
     
     
@@ -37,7 +38,7 @@ public class VendaDAO extends ConnectionFactory{
         List<VendaModel> vendas = new ArrayList<>(); //Array para guardar os estados
 
         try {
-            stmt = connection.prepareStatement("SELECT * FROM produto");
+            stmt = connection.prepareStatement("SELECT * FROM venda");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -45,10 +46,10 @@ public class VendaDAO extends ConnectionFactory{
                 venda.setIdVenda            (rs.getInt("idVenda")); //nomes colunas bando de dados
                 venda.setIdCliente          (rs.getInt("idCliente")); //nomes colunas bando de dados
                 venda.setVendaData          (rs.getDate("vendaData"));
-                venda.setVendaValorLiquido  (rs.getDouble("vendaValorLiquido"));
                 venda.setVendaValorTotal    (rs.getDouble("vendaValorTotal"));
                 venda.setVendaDesconto      (rs.getDouble("vendaDesconto"));
                 venda.setIdProduto          (rs.getInt("idProduto"));
+                venda.setQuantidade         (rs.getInt("quantidade"));
                 vendas.add(venda);
             }
         } catch (SQLException ex) {
@@ -62,7 +63,7 @@ public class VendaDAO extends ConnectionFactory{
     
     
     public void adiciona(VendaModel venda){
-        String sql = "INSERT INTO venda(idCliente,vendaData,vendaValorLiquido,vendaValorTotal,vendaDesconto,idProduto) VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO venda(idCliente,vendaData,vendaValorLiquido,vendaValorTotal,vendaDesconto,idProduto,quantidade) VALUES(?,?,?,?,?,?,?)";
 
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -72,6 +73,7 @@ public class VendaDAO extends ConnectionFactory{
             stmt.setDouble  (4, venda.getVendaValorTotal());
             stmt.setDouble  (5, venda.getVendaDesconto());
             stmt.setInt     (6, venda.getIdProduto());
+            stmt.setInt     (7, venda.getQuantidade());
             stmt.execute(); 
             stmt.close();
         } catch (SQLException u) {
@@ -94,16 +96,17 @@ public class VendaDAO extends ConnectionFactory{
     }
     
     public void update(VendaModel venda) {
-        String sql = "UPDATE venda SET idCliente = ?,vendaData = ?,vendaValorLiquido = ?, vendaValorTotal = ?, vendaDesconto = ?, idCliente = ? WHERE idVenda = ?";  
+        String sql = "UPDATE venda SET idCliente = ?,vendaData = ?,vendaValorLiquido = ?, vendaValorTotal = ?, vendaDesconto = ?, idCliente = ?, quantidade = ? WHERE idVenda = ?";  
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt     (1, venda.getIdCliente());
-            stmt.setDate    (2, (Date)venda.getVendaData());
+            stmt.setDate    (2, (Date) venda.getVendaData());
             stmt.setDouble  (3, venda.getVendaValorLiquido());
             stmt.setDouble  (4, venda.getVendaValorTotal());
             stmt.setDouble  (5, venda.getVendaDesconto());
             stmt.setInt     (6, venda.getIdProduto());
-            stmt.setInt     (7, venda.getIdVenda());
+            stmt.setInt     (7, venda.getQuantidade());
+            stmt.setInt     (8, venda.getIdVenda());
             stmt.execute();
             JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
             stmt.close();
