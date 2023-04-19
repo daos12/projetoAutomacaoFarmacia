@@ -4,14 +4,21 @@ import dao.ProdutoDAO;
 import factory.ConnectionFactory;
 import dao.ClienteDAO;
 import dao.VendaDAO;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import model.VendaModel;
 import util.Formatador;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.ProdutoModel;
 
 public class VendaView extends javax.swing.JFrame {
@@ -21,7 +28,7 @@ public class VendaView extends javax.swing.JFrame {
         leiaJTable();
 
     }
-
+    private Connection connection; // conectando para trazer a quantidade de produtos
     Formatador formatador = new Formatador(); //converter ',' para '.' para inserção no bando de dados
  
 //Tratamento data e hora para a venda
@@ -513,6 +520,7 @@ public class VendaView extends javax.swing.JFrame {
         if (jtProdutoVenda.getSelectedRow() != -1) {
             // instanciando a classe Usuario do pacote modelo e criando seu objeto usuarios
             VendaModel venda = new VendaModel();
+
             venda.setIdVenda            ((int) jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 0));
             venda.setIdCliente          (Integer.parseInt(txfCodigoCliente.getText()));
             venda.setVendaData          (new java.sql.Date(System.currentTimeMillis()));
@@ -522,6 +530,60 @@ public class VendaView extends javax.swing.JFrame {
             venda.setIdProduto          (Integer.parseInt(txfCodigoProduto.getText()));       
             venda.setQuantidade         (Integer.parseInt(txfQuantidade.getText()));       
  
+           
+            
+            int id = 1;
+                  
+            try {
+                // Conexão com o banco de dados
+                connection = new ConnectionFactory().getConnection();
+                
+                // Comando SQL para selecionar a quantidade de um produto pelo ID
+
+                String sql = "SELECT produtoEstoque FROM produto WHERE idProduto = ?";
+
+                // Preparação da consulta com o ID desejado
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                stmt.setInt(1, Integer.parseInt(txfCodigoProduto.getText())); // Substitua "id_do_produto" pelo ID desejado
+
+                // Execução da consulta
+                ResultSet rs = stmt.executeQuery();
+
+                // Leitura do resultado (assumindo que só queremos um resultado)
+                if (rs.next()) {
+                    int quantidade = rs.getInt("produtoEstoque");
+                    System.out.println("Quantidade do produto: " + quantidade);
+                } else {
+                    System.out.println("Produto não encontrado");
+                }
+
+            } catch (SQLException e) {
+                // Tratamento de erros
+                System.err.println("Erro ao buscar a quantidade do produto: " + e.getMessage());
+            }
+
+
+            
+            
+            
+            
+            
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+
+
+            
 
 // fazendo a validação dos dados
             if ((txfCodigoCliente.getText().isEmpty())|(txfTotal.getText().isEmpty())|(txfCodigoProduto.getText().isEmpty())) {
@@ -532,6 +594,8 @@ public class VendaView extends javax.swing.JFrame {
                 VendaDAO dao = new VendaDAO();
                 dao.update(venda);
                 JOptionPane.showMessageDialog(null, "Venda " + txfCodigoProduto.getText() + " atualizada com sucesso! ");
+            
+            
             }
 
             // apaga os dados preenchidos nos campos de texto
@@ -628,7 +692,7 @@ public class VendaView extends javax.swing.JFrame {
 
     private void jtProdutoVendaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtProdutoVendaMouseClicked
         if (jtProdutoVenda.getSelectedRow() != -1) {
-            //txfData.setText             (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 2).toString());
+            txfCodigoCliente.setText    (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 1).toString());
             txfTotal.setText            (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 3).toString());
             txfDesconto.setText         (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 4).toString());
             txfCodigoProduto.setText    (jtProdutoVenda.getValueAt(jtProdutoVenda.getSelectedRow(), 5).toString());

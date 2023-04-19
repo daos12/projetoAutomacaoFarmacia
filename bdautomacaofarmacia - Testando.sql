@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 18-Abr-2023 às 14:12
+-- Tempo de geração: 19-Abr-2023 às 20:41
 -- Versão do servidor: 5.5.21
 -- versão do PHP: 7.4.26
 
@@ -27,9 +27,6 @@ SET time_zone = "+00:00";
 --
 -- Estrutura da tabela `cliente`
 --
-
-CREATE DATABASE bdautomacaofarmacia;
-USE bdautomacaofarmacia;
 
 DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -74,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `produto` (
 --
 
 INSERT INTO `produto` (`idProduto`, `produtoNome`, `produtoValor`, `produtoEstoque`, `produtoObservacao`) VALUES
-(1, 'Tylenol', 36.59, 20, ''),
+(1, 'Tylenol', 36.59, 22, ''),
 (2, 'Omeprazol', 15.5, 32, ''),
 (5, 'Paracetamol', 10, 5, 'Paracetamol'),
 (6, 'Neosaldina ', 15, 41, 'Neosaldina '),
@@ -113,17 +110,21 @@ CREATE TABLE IF NOT EXISTS `venda` (
   `vendaValorTotal` double NOT NULL,
   `vendaDesconto` double NOT NULL,
   `idProduto` int(11) DEFAULT NULL,
+  `quantidade` int(11) DEFAULT NULL,
   PRIMARY KEY (`idVenda`),
-  KEY `fk_cliente` (`idCliente`) USING BTREE,
-  KEY `fk_Produto` (`idProduto`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  KEY `fk_Produto` (`idProduto`),
+  KEY `fk_Cliente` (`idCliente`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `venda`
 --
 
-INSERT INTO `venda` (`idVenda`, `idCliente`, `vendaData`, `vendaValorLiquido`, `vendaValorTotal`, `vendaDesconto`, `idProduto`) VALUES
-(1, 1, '2023-01-05', 100, 100, 0, NULL);
+INSERT INTO `venda` (`idVenda`, `idCliente`, `vendaData`, `vendaValorLiquido`, `vendaValorTotal`, `vendaDesconto`, `idProduto`, `quantidade`) VALUES
+(1, 1, '2023-01-05', 100, 100, 0, 9, 10),
+(2, 1, '2023-04-19', 1, 20, 3, 1, 13),
+(4, 3, '2023-04-18', 8.55, 17.1, 0, 9, 10),
+(5, 1, '2023-04-19', 1, 99, 1, 1, 999);
 
 -- --------------------------------------------------------
 

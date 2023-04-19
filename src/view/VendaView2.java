@@ -667,17 +667,17 @@ public class VendaView2 extends javax.swing.JFrame {
     private void jbAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAdicionarActionPerformed
         
         //Tratamento data e hora cadastro
-        Date dataHoraAtual = new Date();
-        String data = new SimpleDateFormat("yyyy/MM/dd").format(dataHoraAtual);
-        String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
-        //JOptionPane.showConfirmDialog(null, data);
-        
-        VendaModel venda = new VendaModel();
-        venda.setFk_cliente         (Integer.parseInt(txfCodigoCliente.getText()));
-        venda.setVendaData          (new java.sql.Date(System.currentTimeMillis())); //Data exata da venda
-        venda.setVendaValorLiquido  (formatador.converterVirgula(txfValorProduto.getText())); //conversor ',' em '.'
-        venda.setVendaValorTotal    (formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
-        venda.setVendaDesconto      (formatador.converterVirgula(txfDesconto.getText())); //conversor ',' em '.'
+//        Date dataHoraAtual = new Date();
+//        String data = new SimpleDateFormat("yyyy/MM/dd").format(dataHoraAtual);
+//        String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+//        //JOptionPane.showConfirmDialog(null, data);
+//        
+//        VendaModel venda = new VendaModel();
+//        venda.setFk_cliente         (Integer.parseInt(txfCodigoCliente.getText()));
+//        venda.setVendaData          (new java.sql.Date(System.currentTimeMillis())); //Data exata da venda
+//        venda.setVendaValorLiquido  (formatador.converterVirgula(txfValorProduto.getText())); //conversor ',' em '.'
+//        venda.setVendaValorTotal    (formatador.converterVirgula(txfTotal.getText())); //conversor ',' em '.'
+//        venda.setVendaDesconto      (formatador.converterVirgula(txfDesconto.getText())); //conversor ',' em '.'
 
     }//GEN-LAST:event_jbAdicionarActionPerformed
 
