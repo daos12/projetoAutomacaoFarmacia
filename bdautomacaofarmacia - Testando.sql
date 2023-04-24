@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 19-Abr-2023 às 20:41
--- Versão do servidor: 5.5.21
--- versão do PHP: 7.4.26
+-- Tempo de geração: 24-Abr-2023 às 02:55
+-- Versão do servidor: 5.7.40
+-- versão do PHP: 8.0.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -22,6 +21,8 @@ SET time_zone = "+00:00";
 -- Banco de dados: `bdautomacaofarmacia`
 --
 
+CREATE DATABASE bdautomacaofarmacia;
+USE bdautomacaofarmacia;
 -- --------------------------------------------------------
 
 --
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `produto` (
 --
 
 INSERT INTO `produto` (`idProduto`, `produtoNome`, `produtoValor`, `produtoEstoque`, `produtoObservacao`) VALUES
-(1, 'Tylenol', 36.59, 22, ''),
+(1, 'Tylenol', 36.59, 8, ''),
 (2, 'Omeprazol', 15.5, 32, ''),
 (5, 'Paracetamol', 10, 5, 'Paracetamol'),
 (6, 'Neosaldina ', 15, 41, 'Neosaldina '),
@@ -114,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `venda` (
   PRIMARY KEY (`idVenda`),
   KEY `fk_Produto` (`idProduto`),
   KEY `fk_Cliente` (`idCliente`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `venda`
@@ -122,9 +123,14 @@ CREATE TABLE IF NOT EXISTS `venda` (
 
 INSERT INTO `venda` (`idVenda`, `idCliente`, `vendaData`, `vendaValorLiquido`, `vendaValorTotal`, `vendaDesconto`, `idProduto`, `quantidade`) VALUES
 (1, 1, '2023-01-05', 100, 100, 0, 9, 10),
-(2, 1, '2023-04-19', 1, 20, 3, 1, 13),
+(2, 1, '2023-04-23', 1, 20, 3, 1, 13),
 (4, 3, '2023-04-18', 8.55, 17.1, 0, 9, 10),
-(5, 1, '2023-04-19', 1, 99, 1, 1, 999);
+(5, 1, '2023-04-23', 2, 99, 1, 1, 8),
+(6, 1, '2023-04-23', 1, 99, 1, 1, 3),
+(7, 3, '2023-04-23', 1, 15, 0, 10, 15),
+(8, 2, '2023-04-23', 36.59, 73.18, 0, 1, 2),
+(9, 3, '2023-04-23', 36.59, 548.85, 0, 1, 15),
+(10, 3, '2023-04-23', 36.59, 73.18, 0, 1, 2);
 
 -- --------------------------------------------------------
 

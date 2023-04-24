@@ -112,7 +112,7 @@ public class VendaDAO extends ConnectionFactory{
             stmt.close();
 
         } catch (SQLException u) {
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar!");
+            JOptionPane.showMessageDialog(null, "Erro ao realizar a atualização!");
             throw new RuntimeException(u);
         }
     }
